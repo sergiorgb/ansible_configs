@@ -1,0 +1,22 @@
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update Repos
+      apt:
+        update_cache: yes
+    - name: Install Fish
+      apt:
+        name: fish
+    - name: Install GIMP
+      apt:
+        name: gimp
+    - name: Install Flat-Pak
+      apt:
+        name: flatpak
+    - name: Add the flathub flatpak repository remote to the user installation
+      flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        method: system

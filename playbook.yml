@@ -1,8 +1,0 @@
----
-
-- hosts: all
-  become: true
-  tasks:
-  - name: Install Base Packages
-    apt:
-        name: zsh

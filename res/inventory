@@ -1,1 +1,2 @@
 laptop ansible_host=192.168.100.10
+desktop ansible_host=127.0.0.1

@@ -1,0 +1,66 @@
+## Desktop Playbook
+---
+- hosts: all
+  become: true
+  tasks:
+    - name: Update Repos with apt
+      apt:
+        update_cache: yes
+      when: ansible_distribution in ["Debian", "Ubuntu", "ClearLinux"]
+    - name: Update Repos with emerge
+      portage:
+        sync: yes
+      when: ansible_distribution in ["Gentoo"]
+    - name: Install Fish with apt
+      apt:
+        name: fish
+      when: ansible_distribution in ["Debian", "Ubuntu", "ClearLinux"]
+    - name: Install Fish with emerge
+      portage:
+        package: fish
+        state: present
+      when: ansible_distribution in ["Gentoo"]
+    - name: Install GIMP with apt
+      apt:
+        name: gimp
+      when: ansible_distribution in ["Debian", "Ubuntu", "ClearLinux"]
+    - name: Install GIMP with emerge
+      portage:
+        package: gimp
+        state: present
+      when: ansible_distribution in ["Gentoo"]    
+    - name: Install Flat-Pak with apt
+      apt:
+        name: flatpak
+      when: ansible_distribution in ["Debian", "Ubuntu", "ClearLinux"]
+    - name: Install Flat-Pak with emerge
+      portage:
+        package: gimp
+        state: present
+      when: ansible_distribution in ["Gentoo"]    
+    - name: Install NeoVIM with apt
+      apt:
+        name: neovim
+      when: ansible_distribution in ["Debian", "Ubuntu", "ClearLinux"]
+    - name: Install NeoVIM with emerge
+      portage:
+        package: neovim
+        state: present
+      when: ansible_distribution in ["Gentoo"]    
+    - name: Add the flathub flatpak repository remote to the system installation
+      flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        method: system
+    - name: Install the Inkscape Flat-Pak
+      flatpak:
+        name: org.inkscape.Inkscape
+        state: present
+        method: system
+    - name: Install the Fractal Flat-Pak
+      flatpak:
+        name: org.gnome.Fractal
+        state: present
+        method: system
+

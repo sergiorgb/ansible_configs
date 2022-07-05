@@ -1,0 +1,62 @@
+---
+- hosts: localhost
+  connection: local
+  become: true
+
+
+  tasks:
+  
+    - name: Update systen in apt-based distros
+      apt:
+        upgrade: dist
+        update_cache: yes
+      when: ansible_distribution in ["Debian", "Ubuntu", "ClearLinux"]
+
+    - name: Install Packages in apt-based distros
+      apt:
+        name:
+          - git
+          - fish
+          - gimp
+          - flatpak
+          - neovim
+          - rhythmbox
+          - python3-pip
+          - snap
+          - gnucash
+          - neofetch
+          - shellcheck
+          - adb
+          - fastboot
+        update_cache: yes
+      when: ansible_distribution in ["Debian", "Ubuntu", "ClearLinux"]
+
+    - name: Install a .deb package from the internet.
+      apt:
+        deb: https://github.com/VSCodium/vscodium/releases/download/1.68.1/codium_1.68.1-1655338709_amd64.deb
+
+    - name: install python-pip packages
+      pip:
+        state: latest
+        name:
+          - yt-dlp
+          - pip
+
+    - name: Add the flathub flatpak repository remote to the system installation
+      flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+        method: system
+
+    - name: Installing Flatpak packages globally
+      ## Not using flatpak module cuz its broken lmao
+      command: flatpak install --noninteractive org.inkscape.Inkscape com.bitwarden.desktop com.transmissionbt.Transmission org.gnome.Fractal org.telegram.desktop
+   
+    - name: Install UBports installer snap
+      snap:
+        name:
+          - ubports-installer
+          
+    - name: Set-Up Android Udev Rules
+      command: bash res/udevrules.sh
